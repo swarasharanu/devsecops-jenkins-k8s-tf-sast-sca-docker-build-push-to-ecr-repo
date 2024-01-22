@@ -9,6 +9,12 @@ pipeline {
 		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=devsecopsswar -Dsonar.organization=devsecopsswar -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=61ec74f2165fd503daeee5208d0b713e0a808520'
 			}
     }
+       stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
 
 	stage('RunSCAAnalysisUsingSnyk') {
             steps {		
